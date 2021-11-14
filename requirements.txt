@@ -1,4 +1,4 @@
-Python 
+Python == 3.8.2
 matplotlib 
 re  
 streamlit 
@@ -17,3 +17,8 @@ PIL
 pydeck  
 plotly
 streamlit
+numpy>=1.8.2,<2.0.0
+matplotlib>=1.3.1,<2.0.0
+scipy>=0.14.0,<1.0.0
+astroML>=0.2,<1.0
+scikit-learn>=0.14.1,<1.0.0
