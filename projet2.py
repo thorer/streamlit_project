@@ -16,7 +16,7 @@ import pydeck as pdk
 import plotly.graph_objects as go
 
 
-
+#Première partie permet de load de la donnée et de la nettoyer
 @st.cache()
 def loadDF():
     df =  pd.read_csv("full_2020_17.csv")
@@ -45,6 +45,8 @@ renaming(df,'valeur_fonciere','valeur_fonciere2020')
 df['month']=df['date_mutation'].map(get_month)
 mean_vf_2020=df.groupby('month').valeur_fonciere2020.mean()
 
+#Ici on créer un dataFrame pour des données ne possèdant pas Paris dans nom_commune, avec des des valeurs_foncieres sup à 100 000 dans le cache
+# et des surface de terrain supérieur à 9m2
 @st.cache()
 def loadDF_sansParis(df):
     dfSP =  df.loc[~df['nom_commune'].str.contains("Paris", case=False)]
@@ -56,6 +58,7 @@ def loadDF_sansParis(df):
 
 dfSP = loadDF_sansParis(df)
 
+#Ici on créer un dataFrame pour des données ne possèdant exclusivement que Paris dans le cache
 @st.cache()
 def loadDF_Paris(df):
     dfSP =  df.loc[df['nom_commune'].str.contains("Paris", case=False)]
@@ -65,12 +68,6 @@ def loadDF_Paris(df):
 
 dfAP = loadDF_Paris(df)
 
-@st.cache()
-def df42(df):
-    df =  df.loc[df['longitude'].isin([*42])]
-    
-
-    return df
 
 date = dt.date(2020,1,1)
 
@@ -93,17 +90,17 @@ def pageAcceuil():
     img = Image.open("acceuil_immeuble.jpeg") 
     st.image(img, width=700) 
 
-    st.text("Voici le DataFrame utilisé, pour une plus simple utilisation, nous avons décidé de \nn'utiliser que 50 pourcent de la donnée disponible et ceci de façon aléatoire")
-    st.text("Le dataframe ci-dessous que vous pouvez apercevoir est un dataframe fait avec des \nvaleurs aléatoires de 50 poucents de 'full_2020.cvs', \nil a été enregistré dans 'full_2020_2.csv' grâce au fichier df_random_50.py.")
+    st.text("Voici le DataFrame utilisé, pour une plus simple utilisation, nous avons décidé \n d'utiliser que 20 pourcent de la donnée disponible et ceci de façon aléatoire")
+    st.text("Le dataframe ci-dessous que vous pouvez apercevoir est un dataframe fait avec des \nvaleurs aléatoires de 20 poucents de 'full_2020.cvs', \nil a été enregistré dans 'full_2020_17.csv' grâce au fichier df_random_50.py.")
     st.write(df.head(100000))
 
     st.title("Dash board 1 : ")
-    st.text("Dans ce premier dashboard vous retrouverez tous les biens supérieurs à 9m2 et inférieur à 100 000 milles euros, \n (cela représente le prix moyen d'un bien à Paris pour 9m2) ")
+    st.text("Dans ce premier dashboard vous retrouverez tous les biens supérieurs à 9m2 et inférieur à 100 000 milles euros \n en France et non à Paris, \n (cela représente le prix moyen d'un bien à Paris pour 9m2) ")
     img = Image.open("11208669.jpeg") 
     st.image(img, width=700)
 
     st.title("Dash board 2 : ")
-    st.text("Dans ce deuxième dashboard vous retrouverez tous les biens avec le numéro 42 dans leurs ligne, car on sait bien que 42 est la clés de l'univers) ")
+    st.text("Dans ce deuxième dashboard vous retrouverez des données de biens avec le numéro 42 en référence , car on sait bien que 42 est la clé de l'univers) ")
     img = Image.open("reponse-42.jpeg") 
     st.image(img, width=700)
 
@@ -118,14 +115,12 @@ def neufMetre():
     st.text("Dans ce DashBoard vous retrouverai différents éléments pour visualiser des biens mieux qu'à Paris !!! ")
     st.text("Voici le dashboard que nous allons utiliser : ")
 
-    st.text("Voici le DataFrame utilisé, pour une plus simple utilisation, nous avons décidé de \nn'utiliser que 50 pourcent de la donnée disponible et ceci de façon aléatoire")
-    st.text("Le dataframe ci-dessous que vous pouvez apercevoir est un dataframe fait avec des \nvaleurs aléatoires de 50 poucents de 'full_2020.cvs', \nil a été enregistré dans 'full_2020_2.csv' grâce au fichier df_random_50.py.")
     st.write(dfSP.head(100000))
 
     dfSP2 = dfSP.sample(frac=0.50, replace=True, random_state=1)
     st.write("#")
     st.write("#")
-    st.subheader("Voici '50%' (des) des biens disponibles en 2020 en France à 100 000euros et à plus de 9m2 dans une carte : ")
+    st.subheader("Voici '50%' (des 25% de tous les biens) des biens disponibles en 2020 en France à 100 000euros et à plus de 9m2 dans une carte or Paris : ")
     st.write("#")
     st.write("#")
     
@@ -203,7 +198,7 @@ def neufMetre():
         st.plotly_chart(boxe2)
 
 
-    option = st.radio(('Choisis votre chart'),('Scatterplot','Lineplots','Histogram','Boxplot'))
+    option = st.radio(('Choisissez votre chart'),('Scatterplot','Lineplots','Histogram','Boxplot'))
 
     
     if option == 'Scatterplot' :
@@ -244,7 +239,7 @@ def numero42():
     st.write("#")
 
     def second42chart():
-        st.text("Dans ce 3Dscatter plot nous avons la valeur fonciere d'un bien en fonction de sa longitude et latitude:")
+        st.text("Dans ce 3Dscatter plot nous avons la valeur foncière d'un bien en fonction de sa longitude et latitude:")
 
         fig = px.scatter_3d(df.head(42), x='valeur_fonciere2020', y='longitude', z='latitude')
         
