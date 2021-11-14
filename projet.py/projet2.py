@@ -19,7 +19,7 @@ import plotly.graph_objects as go
 
 @st.cache()
 def loadDF():
-    df =  pd.read_csv("full_2020_17.csv.pathlib")
+    df =  pd.read_csv("streamlit_project/projet.py/full_2020_17.csv")
     return df
 
 df = loadDF()
