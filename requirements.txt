@@ -9,5 +9,4 @@ streamlit
 plotly_express 
 plotly
 seaborn 
-os   
 pydeck  
