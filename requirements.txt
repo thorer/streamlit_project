@@ -3,7 +3,7 @@ matplotlib
 streamlit 
 numpy 
 pandas 
-matplotlib.pyplot 
+matplotlib
 plotly_express 
 datetime 
 streamlit.elements.color_picker 
